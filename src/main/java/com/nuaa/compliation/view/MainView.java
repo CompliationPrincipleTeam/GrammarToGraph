@@ -68,6 +68,9 @@ public class MainView extends JFrame implements IMainView {
     public void initView() {
 
 
+        int operateBoardX = 0;
+
+
         setTitle("词法分析");
         setSize(Constant.WindowWidth, Constant.WindowHeight);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,13 +88,13 @@ public class MainView extends JFrame implements IMainView {
 
 
         randioButton1 = new JRadioButton("Left->NF", true);
-        randioButton1.setBounds(650, 0, 100, 30);
+        randioButton1.setBounds(operateBoardX, 0, 100, 30);
         randioButton2 = new JRadioButton("Right->NF");
-        randioButton2.setBounds(750, 0, 100, 30);
+        randioButton2.setBounds(operateBoardX + 100, 0, 100, 30);
         randioButton3 = new JRadioButton("NF->Left");
-        randioButton3.setBounds(850, 0, 100, 30);
+        randioButton3.setBounds(operateBoardX + 200, 0, 100, 30);
         randioButton4 = new JRadioButton("NF->Right");
-        randioButton4.setBounds(950, 0, 100, 30);
+        randioButton4.setBounds(operateBoardX + 300, 0, 100, 30);
 
 
         add(randioButton1);
@@ -107,7 +110,7 @@ public class MainView extends JFrame implements IMainView {
         buttonGroup.add(randioButton4);
 
         rightTitle = new JLabel("文法");
-        rightTitle.setBounds(Constant.GraphWidth + (Constant.WindowWidth - Constant.GraphWidth - 80) / 2, 30, 80, 30);
+        rightTitle.setBounds(operateBoardX + (Constant.WindowWidth - Constant.GraphWidth - 80) / 2, 30, 80, 30);
         add(rightTitle);
 
 
@@ -118,31 +121,31 @@ public class MainView extends JFrame implements IMainView {
         jTable.setRowHeight(20);
         JScrollPane scrollPane = new JScrollPane(jTable);
 
-        scrollPane.setBounds(Constant.GraphWidth, 60, Constant.RightWidth, 300);
+        scrollPane.setBounds(operateBoardX, 60, Constant.RightWidth, 300);
         add(scrollPane);
 
 
         startNodeText = new JTextField();
         startNodeText.setText("起点");
         startNodeText.addFocusListener(new TextFiledFocusListener("起点", startNodeText));
-        startNodeText.setBounds(Constant.GraphWidth + (Constant.RightWidth - 300) / 2, 450, 80, 30);
+        startNodeText.setBounds(operateBoardX + (Constant.RightWidth - 300) / 2, 450, 80, 30);
         add(startNodeText);
 
 
         expressionText = new JTextField();
         expressionText.setText("表达式");
         expressionText.addFocusListener(new TextFiledFocusListener("表达式", expressionText));
-        expressionText.setBounds(100 + Constant.GraphWidth + (Constant.RightWidth - 300) / 2, 450, 200, 30);
+        expressionText.setBounds(100 + operateBoardX + (Constant.RightWidth - 300) / 2, 450, 200, 30);
         add(expressionText);
 
 
         addButton = new JButton("添加");
-        addButton.setBounds(Constant.GraphWidth + (Constant.RightWidth - 100) / 2, 500, 100, 30);
+        addButton.setBounds(operateBoardX + (Constant.RightWidth - 100) / 2, 500, 100, 30);
         add(addButton);
 
 
         drawButton = new JButton("绘制");
-        drawButton.setBounds(Constant.GraphWidth + (Constant.RightWidth - 100) / 2, 550, 100, 30);
+        drawButton.setBounds(operateBoardX + (Constant.RightWidth - 100) / 2, 550, 100, 30);
         add(drawButton);
 
 
@@ -165,7 +168,7 @@ public class MainView extends JFrame implements IMainView {
             default:
                 break;
         }
-        nodeEdgeBasicVisualizationServer.setBounds(0, 0, 650, 650);
+        nodeEdgeBasicVisualizationServer.setBounds(Constant.RightWidth, 0, 650, 650);
         add(nodeEdgeBasicVisualizationServer);
     }
 

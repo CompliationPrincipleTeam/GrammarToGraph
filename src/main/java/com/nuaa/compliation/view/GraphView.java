@@ -96,7 +96,6 @@ public class GraphView {
         });
         vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
 
-        vv.setBackground(Color.lightGray);
 
 
         return vv;
