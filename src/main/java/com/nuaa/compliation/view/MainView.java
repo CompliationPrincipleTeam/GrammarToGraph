@@ -41,12 +41,21 @@ public class MainView extends JFrame implements IMainView {
     private JTextField expressionText;
 
 
+    private JTextField startText;
+    private JTextField valueText;
+    private JTextField endText;
+    private JTextField chuTaiText;
+    private JTextField zhongTaiText;
+
+
     private GrammarToGraph leftGrammarToGraph;
 
     private String[] titles = {"起点", "状态", "终点"};
 
     private BasicVisualizationServer<Node, Edge> nodeEdgeBasicVisualizationServer;
 
+
+    int operateBoardX = 0;
 
     public MainView() throws HeadlessException {
         super();
@@ -62,13 +71,51 @@ public class MainView extends JFrame implements IMainView {
         modelType = ModelType.LeftToNf;
         leftGrammarToGraph = new GrammarToGraph();
 
+        startText = new JTextField();
+        startText.setText("起点");
+        startText.addFocusListener(new TextFiledFocusListener("起点", startText));
+        startText.setBounds(operateBoardX + (Constant.RightWidth - 350) / 2, 450, 100, 30);
+
+
+        valueText = new JTextField();
+        valueText.setText("经过");
+        valueText.addFocusListener(new TextFiledFocusListener("经过", valueText));
+        valueText.setBounds(125 + operateBoardX + (Constant.RightWidth - 350) / 2, 450, 100, 30);
+
+
+        endText = new JTextField();
+        endText.setText("终点");
+        endText.addFocusListener(new TextFiledFocusListener("终点", endText));
+        endText.setBounds(250 + operateBoardX + (Constant.RightWidth - 350) / 2, 450, 100, 30);
+
+
+        chuTaiText = new JTextField();
+        chuTaiText.setText("初态集");
+        chuTaiText.addFocusListener(new TextFiledFocusListener("初态集", chuTaiText));
+        chuTaiText.setBounds(operateBoardX + (Constant.RightWidth - 220) / 2, 490, 100, 30);
+
+
+        zhongTaiText = new JTextField();
+        zhongTaiText.setText("终态集");
+        zhongTaiText.addFocusListener(new TextFiledFocusListener("终态集", zhongTaiText));
+        zhongTaiText.setBounds(120 + operateBoardX + (Constant.RightWidth - 220) / 2, 490, 100, 30);
+
+
+        startNodeText = new JTextField();
+        startNodeText.setText("起点");
+        startNodeText.addFocusListener(new TextFiledFocusListener("起点", startNodeText));
+        startNodeText.setBounds(operateBoardX + (Constant.RightWidth - 300) / 2, 450, 80, 30);
+
+
+        expressionText = new JTextField();
+        expressionText.setText("表达式");
+        expressionText.addFocusListener(new TextFiledFocusListener("表达式", expressionText));
+        expressionText.setBounds(100 + operateBoardX + (Constant.RightWidth - 300) / 2, 450, 200, 30);
+
     }
 
     @Override
     public void initView() {
-
-
-        int operateBoardX = 0;
 
 
         setTitle("词法分析");
@@ -125,28 +172,56 @@ public class MainView extends JFrame implements IMainView {
         add(scrollPane);
 
 
-        startNodeText = new JTextField();
-        startNodeText.setText("起点");
-        startNodeText.addFocusListener(new TextFiledFocusListener("起点", startNodeText));
-        startNodeText.setBounds(operateBoardX + (Constant.RightWidth - 300) / 2, 450, 80, 30);
         add(startNodeText);
 
 
-        expressionText = new JTextField();
-        expressionText.setText("表达式");
-        expressionText.addFocusListener(new TextFiledFocusListener("表达式", expressionText));
-        expressionText.setBounds(100 + operateBoardX + (Constant.RightWidth - 300) / 2, 450, 200, 30);
         add(expressionText);
 
 
         addButton = new JButton("添加");
-        addButton.setBounds(operateBoardX + (Constant.RightWidth - 100) / 2, 500, 100, 30);
+        addButton.setBounds(operateBoardX + (Constant.RightWidth - 100) / 2, 530, 100, 30);
         add(addButton);
 
 
         drawButton = new JButton("绘制");
-        drawButton.setBounds(operateBoardX + (Constant.RightWidth - 100) / 2, 550, 100, 30);
+        drawButton.setBounds(operateBoardX + (Constant.RightWidth - 100) / 2, 570, 100, 30);
         add(drawButton);
+
+
+    }
+
+
+    private void initGrammerToGraph() {
+        remove(startText);
+        remove(valueText);
+        remove(endText);
+        remove(chuTaiText);
+        remove(zhongTaiText);
+
+        add(startNodeText);
+
+
+        add(expressionText);
+
+        repaint();
+
+
+    }
+
+    private void initGraphToGrammer() {
+        remove(startNodeText);
+
+        remove(expressionText);
+
+
+        add(zhongTaiText);
+        add(chuTaiText);
+        add(endText);
+        add(valueText);
+        add(startText);
+
+
+        repaint();
 
 
     }
@@ -211,8 +286,11 @@ public class MainView extends JFrame implements IMainView {
             @Override
             public void stateChanged(ChangeEvent e) {
                 if (randioButton1.isSelected() && modelType != ModelType.LeftToNf) {
+
+                    if (modelType != ModelType.RightToNf) {
+                        initGrammerToGraph();
+                    }
                     modelType = ModelType.LeftToNf;
-                    System.out.println("1");
                 }
             }
         });
@@ -222,7 +300,10 @@ public class MainView extends JFrame implements IMainView {
             @Override
             public void stateChanged(ChangeEvent e) {
                 if (randioButton2.isSelected() && modelType != ModelType.RightToNf) {
-                    System.out.println("2");
+
+                    if (modelType != ModelType.LeftToNf) {
+                        initGrammerToGraph();
+                    }
                     modelType = ModelType.RightToNf;
                 }
             }
@@ -232,7 +313,11 @@ public class MainView extends JFrame implements IMainView {
             @Override
             public void stateChanged(ChangeEvent e) {
                 if (randioButton3.isSelected() && modelType != ModelType.NfToLeft) {
-                    System.out.println("3");
+
+                    if (modelType != ModelType.NfToRight) {
+                        initGraphToGrammer();
+                    }
+
                     modelType = ModelType.NfToLeft;
                 }
             }
@@ -242,7 +327,10 @@ public class MainView extends JFrame implements IMainView {
             @Override
             public void stateChanged(ChangeEvent e) {
                 if (randioButton4.isSelected() && modelType != ModelType.NfToRight) {
-                    System.out.println("4");
+
+                    if (modelType != ModelType.NfToLeft) {
+                        initGraphToGrammer();
+                    }
                     modelType = ModelType.NfToRight;
                 }
             }
