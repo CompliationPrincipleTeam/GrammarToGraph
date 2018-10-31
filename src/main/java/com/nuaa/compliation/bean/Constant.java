@@ -6,13 +6,13 @@ package com.nuaa.compliation.bean;
  */
 public class Constant {
 
-    public static int WindowWidth = 1100;
-    public static int WindowHeight = 650;
+    public static int WindowWidth = 1300;
+    public static int WindowHeight = 800;
 
     public static int GraphWidth = 650;
     public static int GraphHeight = 650;
 
-    public static int RightWidth = 450;
+    public static int RightWidth = 650;
 
 
     public static String startNodeName="S";

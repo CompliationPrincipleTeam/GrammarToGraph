@@ -30,6 +30,45 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
+
+        <dependency>
+            <groupId>jung</groupId>
+            <artifactId>jungalgorithms</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/jung-algorithms-2.0.1.jar</systemPath>
+        </dependency>
+
+
+        <dependency>
+            <groupId>jung</groupId>
+            <artifactId>junggraph</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/jung-graph-impl-2.0.1.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>jung</groupId>
+            <artifactId>jungvisualization</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/jung-visualization-2.0.1.jar</systemPath>
+        </dependency>
+
+
+        <dependency>
+            <groupId>jung</groupId>
+            <artifactId>jungapi</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/jung-api-2.0.1.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>jung</groupId>
+            <artifactId>jungcollections</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/collections-generic-4.01.jar</systemPath>
+        </dependency>
+
+
     </dependencies>
 
     <build>

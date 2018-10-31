@@ -10,11 +10,10 @@ import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
-
-import java.awt.*;
-import javax.swing.*;
-
 import org.apache.commons.collections15.Transformer;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author dmrfcoder

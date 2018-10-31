@@ -49,11 +49,14 @@ public class GrammarToGraph extends BaseConvertGrammarToGraph {
      * @param split
      */
     private void leftGrammarAddEdges(String endNode, String[] split) {
+
         for (String item : split) {
             if (item.length() == 1) {
                 leftGraph.addEdge(new Node(Constant.startNodeName, NodeType.startNode), endNode, String.valueOf(item.charAt(0)));
 
+
             } else if (item.length() == 2) {
+
                 leftGraph.addEdge(String.valueOf(item.charAt(0)), endNode, String.valueOf(item.charAt(1)));
             }
         }
