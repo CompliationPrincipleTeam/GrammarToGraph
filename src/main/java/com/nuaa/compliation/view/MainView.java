@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author dmrfcoder
@@ -56,11 +57,15 @@ public class MainView extends JFrame implements IMainView {
     private JTextField chuTaiText;
     private JTextField zhongTaiText;
 
+
     private JPopupMenu grammarJPopupMenu;
     private JPopupMenu graphJPopupMenu;
 
     private JMenuItem grammarDelMenItem;
     private JMenuItem graphDelMenItem;
+
+    private JLabel chutaiLabel;
+    private JLabel zhongtaiLabel;
 
 
     private GrammarToGraph grammarToGraph;
@@ -96,6 +101,20 @@ public class MainView extends JFrame implements IMainView {
     private ArrayList<String[]> nfRightGraphList;
 
 
+    private String chuTaiLeft;
+    private String chuTaiRight;
+
+    private String zhongTaiLeft;
+    private String zhongTaiRight;
+
+    private String chuTai;
+    private String zhongTai;
+
+
+    private ArrayList<String[]> graphListLeft;
+    private ArrayList<String[]> graphListRight;
+
+
     public MainView() throws HeadlessException {
         super();
         initData();
@@ -107,6 +126,13 @@ public class MainView extends JFrame implements IMainView {
 
     @Override
     public void initData() {
+
+        chuTai = "";
+        chuTaiLeft = "";
+        chuTaiRight = "";
+        zhongTai = "";
+        zhongTaiLeft = "";
+        zhongTaiRight = "";
 
 
         expressionList = new ArrayList<>();
@@ -123,6 +149,9 @@ public class MainView extends JFrame implements IMainView {
 
         nfRightExpressionList = new ArrayList<>();
         nfRightGraphList = new ArrayList<>();
+
+        graphListLeft = new ArrayList<>();
+        graphListRight = new ArrayList<>();
 
 
         grammarJPopupMenu = new JPopupMenu();
@@ -146,47 +175,62 @@ public class MainView extends JFrame implements IMainView {
         graphJPopupMenu.add(graphDelMenItem);
 
 
+        chutaiLabel = new JLabel("初态集：");
+        chutaiLabel.setBounds(operateBoardX + (Constant.RightWidth - 420) / 2, 550, 200, 30);
+        add(chutaiLabel);
+
+        zhongtaiLabel = new JLabel("终态集：");
+        zhongtaiLabel.setBounds(operateBoardX + (Constant.RightWidth - 420) / 2 + 220, 550, 200, 30);
+        add(zhongtaiLabel);
+
+
         startText = new JTextField();
         startText.setText("起点");
         startText.addFocusListener(new TextFiledFocusListener("起点", startText));
-        startText.setBounds(operateBoardX + (Constant.RightWidth - 350) / 2, 550, 100, 30);
+        startText.setBounds(operateBoardX + (Constant.RightWidth - 350) / 2, 580, 100, 30);
 
 
         valueText = new JTextField();
         valueText.setText("经过");
         valueText.addFocusListener(new TextFiledFocusListener("经过", valueText));
-        valueText.setBounds(125 + operateBoardX + (Constant.RightWidth - 350) / 2, 550, 100, 30);
+        valueText.setBounds(125 + operateBoardX + (Constant.RightWidth - 350) / 2, 580, 100, 30);
 
 
         endText = new JTextField();
         endText.setText("终点");
         endText.addFocusListener(new TextFiledFocusListener("终点", endText));
-        endText.setBounds(250 + operateBoardX + (Constant.RightWidth - 350) / 2, 550, 100, 30);
+        endText.setBounds(250 + operateBoardX + (Constant.RightWidth - 350) / 2, 580, 100, 30);
 
 
         chuTaiText = new JTextField();
         chuTaiText.setText("初态集");
         chuTaiText.addFocusListener(new TextFiledFocusListener("初态集", chuTaiText));
-        chuTaiText.setBounds(operateBoardX + (Constant.RightWidth - 220) / 2, 590, 100, 30);
+        chuTaiText.setBounds(operateBoardX + (Constant.RightWidth - 220) / 2, 620, 100, 30);
 
 
         zhongTaiText = new JTextField();
         zhongTaiText.setText("终态集");
         zhongTaiText.addFocusListener(new TextFiledFocusListener("终态集", zhongTaiText));
-        zhongTaiText.setBounds(120 + operateBoardX + (Constant.RightWidth - 220) / 2, 590, 100, 30);
+        zhongTaiText.setBounds(120 + operateBoardX + (Constant.RightWidth - 220) / 2, 620, 100, 30);
 
 
         startNodeText = new JTextField();
         startNodeText.setText("起点");
         startNodeText.addFocusListener(new TextFiledFocusListener("起点", startNodeText));
-        startNodeText.setBounds(operateBoardX + (Constant.RightWidth - 300) / 2, 550, 80, 30);
+        startNodeText.setBounds(operateBoardX + (Constant.RightWidth - 300) / 2, 580, 80, 30);
 
 
         expressionText = new JTextField();
         expressionText.setText("表达式");
         expressionText.addFocusListener(new TextFiledFocusListener("表达式", expressionText));
-        expressionText.setBounds(100 + operateBoardX + (Constant.RightWidth - 300) / 2, 550, 200, 30);
+        expressionText.setBounds(100 + operateBoardX + (Constant.RightWidth - 300) / 2, 580, 200, 30);
 
+
+    }
+
+    private void updateChuTaiAndZhongTaiLabel() {
+        chutaiLabel.setText("初态集：{" + chuTai.replace('|', ',') + "}");
+        zhongtaiLabel.setText("终态集：{" + zhongTai.replace('|', ',') + "}");
 
     }
 
@@ -280,18 +324,20 @@ public class MainView extends JFrame implements IMainView {
 
 
         addButton = new JButton("添加");
-        addButton.setBounds(operateBoardX + (Constant.RightWidth - 100) / 2, 630, 100, 30);
+        addButton.setBounds(operateBoardX + (Constant.RightWidth - 100) / 2, 660, 100, 30);
         add(addButton);
 
 
         drawButton = new JButton("绘制");
-        drawButton.setBounds(operateBoardX + (Constant.RightWidth - 100) / 2, 670, 100, 30);
+        drawButton.setBounds(operateBoardX + (Constant.RightWidth - 100) / 2, 700, 100, 30);
         add(drawButton);
 
         clearButton = new JButton("清屏");
-        clearButton.setBounds(operateBoardX + (Constant.RightWidth - 100) / 2, 710, 100, 30);
+        clearButton.setBounds(operateBoardX + (Constant.RightWidth - 100) / 2, 740, 100, 30);
         add(clearButton);
 
+
+        getRootPane().setDefaultButton(addButton);
 
     }
 
@@ -358,13 +404,54 @@ public class MainView extends JFrame implements IMainView {
         String[] splitZhongtai = zhongTai.split("\\|");
 
 
-       // graphToGrammar.graphToLeftGrammer(splitChutai, splitZhongtai, graphList);
+        Grammar grammar = graphToGrammar.graphToGrammar(splitChutai, splitZhongtai, graphList, modelType);
+
+
+        List<String> p = grammar.getP();
+
+        expressionList.clear();
+
+        for (String itemP : p) {
+            String[] split = itemP.split("->");
+            expressionList.add(split);
+        }
+
+        updateTable();
+
 
         drawGraph();
+
+        updateChuTaiAndZhongTaiLabel();
 
 
     }
 
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+
+
+        int x = Constant.RightWidth + 500;
+        int y = 20;
+
+
+        g.setColor(Constant.startNodeColor);
+        g.fillOval(x, 30, 10, 10);
+
+        g.drawString("初态结点", x + 30, 40);
+
+
+        g.setColor(Constant.endNodeColor);
+        g.fillOval(x, 50, 10, 10);
+        g.drawString("终态结点", x + 30, 60);
+
+        g.setColor(Constant.normalNodeColor);
+        g.fillOval(x, 70, 10, 10);
+        g.drawString("常规结点", x + 30, 80);
+
+
+    }
 
     private void drawGraph() {
 
@@ -380,20 +467,23 @@ public class MainView extends JFrame implements IMainView {
                 nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(grammarToGraph.rightGraph);
                 break;
             case NfToLeft:
-               // nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(graphToGrammar.leftGraph);
+                nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(graphToGrammar.leftGraph);
                 break;
             case NfToRight:
-               // nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(graphToGrammar.rightGraph);
+                nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(graphToGrammar.rightGraph);
                 break;
             default:
                 break;
         }
-        nodeEdgeBasicVisualizationServer.setBounds(Constant.RightWidth, 0, 650, 650);
+
+
+        nodeEdgeBasicVisualizationServer.setBounds(Constant.RightWidth, 100, 650, 650);
         add(nodeEdgeBasicVisualizationServer);
     }
 
     @Override
     public void initListener() {
+
 
         clearButton.addActionListener(new ActionListener() {
             @Override
@@ -480,8 +570,8 @@ public class MainView extends JFrame implements IMainView {
                 if (modelType == ModelType.RightToNf || modelType == ModelType.LeftToNf) {
                     drawGraph();
                 } else {
-                    String chuTai = chuTaiText.getText().trim();
-                    String zhongTai = zhongTaiText.getText().trim();
+                    chuTai = chuTaiText.getText().trim();
+                    zhongTai = zhongTaiText.getText().trim();
 
                     if ("初态集".equals(chuTai) || "终态集".equals(zhongTai)) {
                         JOptionPane.showMessageDialog(null, "请输入完整的初态集和终态集！");
@@ -637,16 +727,19 @@ public class MainView extends JFrame implements IMainView {
                 rightGraphList = graphList;
                 break;
             case NfToRight:
+                chuTaiRight = chuTai;
+                zhongTaiRight = zhongTai;
+                graphListRight = graphList;
+
 
                 break;
             case NfToLeft:
-                nfLeftExpressionList = expressionList;
-                nfLeftGraphList = graphList;
+                chuTaiLeft = chuTai;
+                zhongTaiLeft = zhongTai;
+                graphListLeft = graphList;
                 break;
             default:
 
-                nfRightExpressionList = expressionList;
-                nfRightGraphList = graphList;
                 break;
         }
 
@@ -654,24 +747,47 @@ public class MainView extends JFrame implements IMainView {
             case LeftToNf:
                 expressionList = leftExpressionList;
                 graphList = leftGraphList;
+                showGrammarRestore();
                 break;
             case RightToNf:
                 expressionList = rightExpressionList;
                 graphList = rightGraphList;
+                showGrammarRestore();
                 break;
             case NfToRight:
-                expressionList = nfRightExpressionList;
-                graphList = nfRightGraphList;
+                chuTai = chuTaiRight;
+                zhongTai = zhongTaiRight;
+                graphList = graphListRight;
+                showGraphRestore();
                 break;
             case NfToLeft:
-                expressionList = nfLeftExpressionList;
-                graphList = nfLeftGraphList;
+                chuTai = chuTaiLeft;
+                zhongTai = zhongTaiLeft;
+                graphList = graphListLeft;
+                showGraphRestore();
                 break;
             default:
                 break;
         }
 
 
+    }
+
+    private void showGraphRestore() {
+
+
+        if (!"".equals(chuTai)) {
+            chuTaiText.setText(chuTai);
+        }
+        if (!"".equals(zhongTai)) {
+            zhongTaiText.setText(zhongTaiLeft);
+        }
+
+
+        coculateGraphToGrammar(chuTai, zhongTai);
+    }
+
+    private void showGrammarRestore() {
         int count = tabelModelGrammar.getRowCount();
         for (int i = 0; i < count; i++) {
             tabelModelGrammar.removeRow(0);
@@ -690,8 +806,6 @@ public class MainView extends JFrame implements IMainView {
             tabelModelGraph.addRow(graph);
         }
         drawGraph();
-
-
     }
 
 

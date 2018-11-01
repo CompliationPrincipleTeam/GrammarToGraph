@@ -3,6 +3,7 @@ package test.com.nuaa.compliation.convert;
 import com.nuaa.compliation.bean.Grammar;
 import com.nuaa.compliation.bean.Graph;
 import com.nuaa.compliation.convert.GraphToGrammar;
+import com.nuaa.compliation.enums.ModelType;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -53,7 +54,7 @@ public class GraphToGrammarTest {
 
 
         GraphToGrammar graphToGrammar = new GraphToGrammar();
-        graphToGrammar.graphToLeftGrammer(split, split1, graphList);
+        graphToGrammar.graphToGrammar(split, split1, graphList, ModelType.NfToLeft);
 
         List<String> p = graphToGrammar.leftGrammar.getP();
 

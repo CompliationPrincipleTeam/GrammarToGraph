@@ -98,20 +98,38 @@ public class GrammarToGraph extends BaseConvertGrammarToGraph {
      *              node  = D
      *              split = {"0","B0","C0","0"}
      */
-    private void rightGrammarAddEdges(String node, String[] split) {
-        //public Node(String value, NodeType nodeType)
-        //public void addEdge(Object startNode, Object endNode, String edgeValue)
+    private void rightGrammarAddEdges(String node, String[] split) throws GrammarPhaseException {
         Node endNode = new Node(Constant.endNodeName, NodeType.endNode);
-        for (String s : split) {
-            if (s.length() == 1) {
-                rightGraph.addEdge(node, endNode, String.valueOf(s.charAt(0)));
-            } else {
-                int len = s.length();
-                rightGraph.addEdge(node, String.valueOf(s.charAt(len - 1)), s.substring(0, len - 1));
+
+        for (String item : split) {
+            if (item.length() == 1)  {
+                char itemZero = item.charAt(0);
+                if (isInt(itemZero)) {
+
+                    rightGraph.addEdge(new Node(Constant.startNodeName, NodeType.startNode), endNode, String.valueOf(itemZero));
+                } else {
+
+                    throw new GrammarPhaseException(item + "格式非法！");
+                }
+
+
+            } else if (item.length() == 2) {
+                char itemZero = item.charAt(0);
+                char itemFirst = item.charAt(1);
+
+                if (isChar(itemFirst) && isInt(itemZero)) {
+
+                    rightGraph.addEdge(node, String.valueOf(itemFirst), String.valueOf(itemZero));
+                } else {
+                    throw new GrammarPhaseException(item + "不是合法的右文法表达式！");
+
+                }
+
+
             }
-
-
         }
+
+
     }
 
 
