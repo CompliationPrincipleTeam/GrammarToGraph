@@ -537,8 +537,6 @@ public class MainView extends JFrame implements IMainView {
                     drawGraph();
                     coculateGrammerToGraph();
                 }
-
-
             }
         });
 
