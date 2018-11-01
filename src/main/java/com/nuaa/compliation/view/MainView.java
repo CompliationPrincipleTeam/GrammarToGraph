@@ -1,5 +1,6 @@
 package com.nuaa.compliation.view;
 
+import com.apple.eawt.Application;
 import com.nuaa.compliation.bean.*;
 import com.nuaa.compliation.convert.GrammarToGraph;
 import com.nuaa.compliation.convert.GraphToGrammar;
@@ -9,6 +10,7 @@ import com.nuaa.compliation.exception.GrammarPhaseException;
 import com.nuaa.compliation.inter.IMainView;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -16,6 +18,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,6 +123,20 @@ public class MainView extends JFrame implements IMainView {
 
     public MainView() throws HeadlessException {
         super();
+
+
+        try {
+            UIManager.setLookAndFeel("com.apple.laf.AquaLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+
+
+        setIconImage(new ImageIcon("res/icon.png").getImage());
+        Application.getApplication().setDockIconImage(
+                new ImageIcon("res/icon.png").getImage());
+
+
         initData();
         initView();
         initListener();
