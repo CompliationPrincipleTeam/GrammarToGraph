@@ -65,6 +65,7 @@ public class convertTest {
     	//输入：两个字符数组
     	//开始符号默认是start[0]
     	//终结符默认 "F"
+
     @Test
 	public void testRightGrammarToGraph() throws GrammarPhaseException
 	{
@@ -75,6 +76,7 @@ public class convertTest {
 		String[] expr =  {"0|0B|1D","0D|1C","0|0B|1D","0D|1D"};
 		GrammarToGraph.rightGrammarToGraph(start, expr);
 	}
+
 
 
 } 

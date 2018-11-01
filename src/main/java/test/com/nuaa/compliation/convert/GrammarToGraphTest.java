@@ -13,7 +13,7 @@ import org.junit.After;
  * @version 1.0
  * @since <pre>十月 30, 2018</pre>
  */
-public class LeftGrammarToGraphTest {
+public class GrammarToGraphTest {
 
     @Before
     public void before() throws Exception {
@@ -46,7 +46,7 @@ public class LeftGrammarToGraphTest {
     }
 
     @Test
-    public void rightLeftGrammarToGraph() throws Exception {
+    public void testRightGrammarToGraph() throws Exception {
         //TODO: Test goes here...
         String start = "D";
         String expression = "1|1c|0d|1d|0b";
@@ -85,12 +85,12 @@ public class LeftGrammarToGraphTest {
     }
 
     @Test
-    public void testStrIsNumber(){
-        String str="1";
+    public void testStrIsNumber() {
+        String str = "1";
 
-        if (str.matches("\\d+")){
+        if (str.matches("\\d+")) {
             System.out.println("is number");
-        }else {
+        } else {
             System.out.println("not number");
         }
     }

@@ -1,5 +1,6 @@
 package com.nuaa.compliation.view;
 
+import com.nuaa.compliation.bean.Constant;
 import com.nuaa.compliation.bean.Edge;
 import com.nuaa.compliation.bean.Graph;
 import com.nuaa.compliation.bean.Node;
@@ -9,6 +10,9 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 import org.apache.commons.collections15.Transformer;
 
@@ -42,11 +46,11 @@ public class GraphView {
             @Override
             public Paint transform(Node node) {
                 if (node.getNodeType() == NodeType.startNode) {
-                    return Color.green;
+                    return Constant.startNodeColor;
                 } else if (node.getNodeType() == NodeType.endNode) {
-                    return Color.red;
+                    return Constant.endNodeColor;
                 } else {
-                    return Color.cyan;
+                    return Constant.normalNodeColor;
                 }
             }
         };
@@ -94,7 +98,6 @@ public class GraphView {
             }
         });
         vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
-
 
 
         return vv;

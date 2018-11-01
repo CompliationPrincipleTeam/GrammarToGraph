@@ -95,12 +95,11 @@ public class GrammarToGraph extends BaseConvertGrammarToGraph {
      * 通过操作rightGraph来添加边
      *
      * @param node
-     * @param split
-     * example: 某产生式为  D-> 0A|0B|0C|0
-     * node  = D
-     * split = {"0","B0","C0","0"}
-     * 
+     * @param split example: 某产生式为  D-> 0A|0B|0C|0
+     *              node  = D
+     *              split = {"0","B0","C0","0"}
      */
+
     private void rightGrammarAddEdges(String node, String[] split) {
     	//public Node(String value, NodeType nodeType)
     	//public void addEdge(Object startNode, Object endNode, String edgeValue) 
@@ -118,21 +117,24 @@ public class GrammarToGraph extends BaseConvertGrammarToGraph {
     			
     			
     	}
+
+
     }
-    
-    
+
+
     //产生式：start[i] -> expr[i]
-	//VT = {0,1,....}
-	//VN = {A,B,C,D,...}
-	//输入：两个字符数组
-	//开始符号默认是start[0]
-	//终结符默认 "F"
-    public void rightGrammarToGraph(String[] start, String[] expr)
-    {
-    	GrammarToGraph grammarToGraph = new GrammarToGraph();
-    	for(int i=0;i<start.length;i++)
-        	grammarToGraph.addEdges(start[i], expr[i], ModelType.RightToNf);
-    	String[][] edges = grammarToGraph.getStrEdges(ModelType.RightToNf);
+    //VT = {0,1,....}
+    //VN = {A,B,C,D,...}
+    //输入：两个字符数组
+    //开始符号默认是start[0]
+    //终结符默认 "F"
+    public void rightGrammarToGraph(String[] start, String[] expr) throws GrammarPhaseException {
+        GrammarToGraph grammarToGraph = new GrammarToGraph();
+        for (int i = 0; i < start.length; i++) {
+            grammarToGraph.addEdges(start[i], expr[i], ModelType.RightToNf);
+        }
+
+        String[][] edges = grammarToGraph.getStrEdges(ModelType.RightToNf);
 
         for (String[] edge : edges) {
             System.out.println(edge[0] + "-" + edge[1] + "->" + edge[2]);
