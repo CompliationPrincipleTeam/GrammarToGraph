@@ -1,6 +1,7 @@
 package com.nuaa.compliation.bean;
 
 
+import com.nuaa.compliation.enums.NodeType;
 import com.nuaa.compliation.inter.IGraph;
 
 import java.util.ArrayList;
@@ -141,5 +142,27 @@ public class Graph implements IGraph {
     public void clearGraph() {
         edges.clear();
         nodes.clear();
+    }
+
+    @Override
+    public void updateChuTai(String[] chuTai) {
+        for (Node node : nodes) {
+            for (String itemChuTai : chuTai) {
+                if (node.getValue().equals(itemChuTai)) {
+                    node.setNodeType(NodeType.startNode);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void updateZhongTai(String[] zhongTai) {
+        for (Node node : nodes) {
+            for (String itemChuTai : zhongTai) {
+                if (node.getValue().equals(itemChuTai)) {
+                    node.setNodeType(NodeType.endNode);
+                }
+            }
+        }
     }
 }

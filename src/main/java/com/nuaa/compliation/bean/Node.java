@@ -41,6 +41,7 @@ public class Node {
 
     @Override
     public boolean equals(Object obj) {
+
         Node node = (Node) obj;
         return this.value.equals(node.getValue());
     }

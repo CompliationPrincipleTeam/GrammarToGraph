@@ -1,65 +1,62 @@
-package test.com.nuaa.compliation.convert; 
+package test.com.nuaa.compliation.convert;
 
-import org.junit.Test; 
-import org.junit.Before; 
-import org.junit.After; 
+import com.nuaa.compliation.bean.Grammar;
+import com.nuaa.compliation.bean.Graph;
+import com.nuaa.compliation.convert.GraphToGrammar;
+import org.junit.Test;
+import org.junit.Before;
+import org.junit.After;
 
-/** 
-* GraphToGrammar Tester. 
-* 
-* @author <Authors name> 
-* @since <pre>十月 31, 2018</pre> 
-* @version 1.0 
-*/ 
-public class GraphToGrammarTest { 
+import java.util.List;
 
-@Before
-public void before() throws Exception { 
-} 
+/**
+ * GraphToGrammar Tester.
+ *
+ * @author <Authors name>
+ * @version 1.0
+ * @since <pre>十一月 1, 2018</pre>
+ */
+public class GraphToGrammarTest {
 
-@After
-public void after() throws Exception { 
-} 
+    @Before
+    public void before() throws Exception {
+    }
+
+    @After
+    public void after() throws Exception {
+    }
+
+    /**
+     * Method: graphToLeftGrammer(Graph graph)
+     */
+    @Test
+    public void testGraphToLeftGrammer() throws Exception {
+//TODO: Test goes here...
+        String[] split = {"A"};
+        String[] split1 = {"B", "D"};
 
 
-/** 
-* 
-* Method: graphToLeftGrammar(Graph graph) 
-* 
-*/ 
-@Test
-public void testGraphToLeftGrammar() throws Exception { 
-//TODO: Test goes here... 
-/* 
-try { 
-   Method method = GraphToGrammar.getClass().getMethod("graphToLeftGrammar", Graph.class); 
-   method.setAccessible(true); 
-   method.invoke(<Object>, <Parameters>); 
-} catch(NoSuchMethodException e) { 
-} catch(IllegalAccessException e) { 
-} catch(InvocationTargetException e) { 
-} 
-*/ 
-} 
+        Graph graph = new Graph();
+        graph.addEdge("A", "0", "B");
+        graph.addEdge("A", "1", "C");
+        graph.addEdge("B", "0", "C");
+        graph.addEdge("C", "0", "D");
 
-/** 
-* 
-* Method: graphToRightGrammar(Graph graph) 
-* 
-*/ 
-@Test
-public void testGraphToRightGrammar() throws Exception { 
-//TODO: Test goes here... 
-/* 
-try { 
-   Method method = GraphToGrammar.getClass().getMethod("graphToRightGrammar", Graph.class); 
-   method.setAccessible(true); 
-   method.invoke(<Object>, <Parameters>); 
-} catch(NoSuchMethodException e) { 
-} catch(IllegalAccessException e) { 
-} catch(InvocationTargetException e) { 
-} 
-*/ 
-} 
+
+        graph.updateChuTai(split);
+        graph.updateZhongTai(split1);
+
+        GraphToGrammar graphToGrammar = new GraphToGrammar();
+        Grammar grammar = graphToGrammar.graphToLeftGrammer(graph);
+
+        List<String> p = grammar.getP();
+
+        for (String str : p) {
+            System.out.println(str);
+        }
+
+
+    }
+
 
 } 

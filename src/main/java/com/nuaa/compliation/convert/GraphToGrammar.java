@@ -1,6 +1,5 @@
 package com.nuaa.compliation.convert;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,24 +9,30 @@ import com.nuaa.compliation.bean.Graph;
 import com.nuaa.compliation.bean.Node;
 import com.nuaa.compliation.enums.NodeType;
 
+import javax.lang.model.type.NoType;
+
 /**
  * @author dmrfcoder
  * @date 2018/10/30
  */
 public class GraphToGrammar {
 
-    private Graph graph;
-    private Grammar grammer;
 
     public GraphToGrammar() {
         // TODO Auto-generated constructor stub
-        graph = new Graph();
-        grammer = new Grammar();
+
     }
 
-    public void graphToLeftGrammer(List<Edge> edges, List<Node> nodes) {
+    public Grammar graphToLeftGrammer(Graph graph) {
+
+        Grammar grammer = new Grammar();
+
+        List<Edge> edges = graph.getEdges();
+        List<Node> nodes = graph.getNodes();
         //获取非终结符集
         List<String> vN = new ArrayList<>();
+
+
         for (int i = 0; i < nodes.size(); i++) {
             vN.add(nodes.get(i).getValue());
         }
@@ -65,16 +70,16 @@ public class GraphToGrammar {
         }
         for (int i = 0; i < p.size(); i++) {
             for (int j = 0; j < edges.size(); j++) {
-                if (edges.get(j).getEndNode().equals(p.get(i).charAt(0))) {
+                if (edges.get(j).getEndNode().getValue().equals(p.get(i).charAt(0))) {
                     if (p.get(i).length() <= 3) {
-                        if (s1.contains(edges.get(j).getStartNode())) {
+                        if (s1.contains(edges.get(j).getStartNode().getValue())) {
                             p.set(i, p.get(i) + edges.get(j).getEdgeValue() + '|' + edges.get(j).getStartNode().getValue() + edges.get(j).getEdgeValue());
                         } else {
                             p.set(i, p.get(i) + edges.get(j).getStartNode().getValue() + edges.get(j).getEdgeValue());
                         }
 
                     } else {
-                        if (s1.contains(edges.get(j).getStartNode())) {
+                        if (s1.contains(edges.get(j).getStartNode().getValue())) {
                             p.set(i, p.get(i) + '|' + edges.get(j).getEdgeValue() + '|' + edges.get(j).getStartNode().getValue() + edges.get(j).getEdgeValue());
                         } else {
                             p.set(i, p.get(i) + '|' + edges.get(j).getStartNode().getValue() + edges.get(j).getEdgeValue());
@@ -101,10 +106,9 @@ public class GraphToGrammar {
         }
 
         grammer.setP(p);
+
+        return grammer;
+
     }
 
-    public Grammar getGrammer() {
-        return this.grammer;
-    }
 }
-

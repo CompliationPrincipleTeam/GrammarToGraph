@@ -84,4 +84,15 @@ public class LeftGrammarToGraphTest {
         }
     }
 
+    @Test
+    public void testStrIsNumber(){
+        String str="1";
+
+        if (str.matches("\\d+")){
+            System.out.println("is number");
+        }else {
+            System.out.println("not number");
+        }
+    }
+
 } 

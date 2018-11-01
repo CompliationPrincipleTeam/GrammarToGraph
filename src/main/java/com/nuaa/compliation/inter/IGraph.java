@@ -22,4 +22,10 @@ public interface IGraph {
 
     void clearGraph();
 
+
+    void updateChuTai(String[] chuTai);
+
+    void updateZhongTai(String[] zhongTai);
+
+
 }

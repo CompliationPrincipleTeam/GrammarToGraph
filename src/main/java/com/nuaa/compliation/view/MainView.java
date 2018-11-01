@@ -2,6 +2,7 @@ package com.nuaa.compliation.view;
 
 import com.nuaa.compliation.bean.*;
 import com.nuaa.compliation.convert.GrammarToGraph;
+import com.nuaa.compliation.convert.GraphToGrammar;
 import com.nuaa.compliation.enums.ModelType;
 import com.nuaa.compliation.exception.GrammarPhaseException;
 import com.nuaa.compliation.inter.IMainView;
@@ -63,6 +64,8 @@ public class MainView extends JFrame implements IMainView {
 
 
     private GrammarToGraph grammarToGraph;
+    private GraphToGrammar graphToGrammar;
+
 
     private String[] titles = {"起点", "状态", "终点"};
     private String[] titles2 = {"结点", "表达式"};
@@ -125,6 +128,12 @@ public class MainView extends JFrame implements IMainView {
         grammarJPopupMenu = new JPopupMenu();
         graphJPopupMenu = new JPopupMenu();
 
+
+        modelType = ModelType.LeftToNf;
+        grammarToGraph = new GrammarToGraph();
+        graphToGrammar = new GraphToGrammar();
+
+
         grammarDelMenItem = new JMenuItem();
         grammarDelMenItem.setText("  删除  ");
 
@@ -136,9 +145,6 @@ public class MainView extends JFrame implements IMainView {
 
         graphJPopupMenu.add(graphDelMenItem);
 
-
-        modelType = ModelType.LeftToNf;
-        grammarToGraph = new GrammarToGraph();
 
         startText = new JTextField();
         startText.setText("起点");
@@ -346,7 +352,23 @@ public class MainView extends JFrame implements IMainView {
         updateTable();
     }
 
-    private void coculateGraphToGrammar() {
+    private void coculateGraphToGrammar(String chuTai, String zhongTai) {
+
+        String[] split = chuTai.split("\\|");
+        String[] split1 = zhongTai.split("\\|");
+
+
+        Graph graph = new Graph();
+        for (String[] edge : graphList) {
+
+            graph.addEdge(edge[0], edge[1], edge[2]);
+        }
+
+        graph.updateChuTai(split);
+        graph.updateZhongTai(split1);
+
+        Grammar grammar = graphToGrammar.graphToLeftGrammer(graph);
+
 
     }
 
@@ -432,6 +454,13 @@ public class MainView extends JFrame implements IMainView {
                     if ("起点".equals(start) || "经过".equals(vaule) || "终点".equals(end)) {
                         JOptionPane.showMessageDialog(null, "请填写完整的关系！");
                     } else {
+
+
+                        if (!vaule.matches("\\d+")) {
+                            JOptionPane.showMessageDialog(null, start + "格式非法！");
+                            return;
+                        }
+
                         String[] graphItem = {start, vaule, end};
                         graphList.add(graphItem);
 
@@ -450,172 +479,155 @@ public class MainView extends JFrame implements IMainView {
             }
         });
 
-        drawButton.addActionListener(new
+        drawButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (modelType == ModelType.RightToNf || modelType == ModelType.LeftToNf) {
+                    drawGraph();
+                } else {
+                    String chuTai = chuTaiText.getText().trim();
+                    String zhongTai = zhongTaiText.getText().trim();
 
-                                             ActionListener() {
-                                                 @Override
-                                                 public void actionPerformed(ActionEvent e) {
-                                                     if (modelType == ModelType.RightToNf || modelType == ModelType.LeftToNf) {
-                                                         drawGraph();
-                                                     } else {
-                                                         String chuTai = chuTaiText.getText().trim();
-                                                         String zhongTai = zhongTaiText.getText().trim();
-
-                                                         if ("初态集".equals(chuTai) || "终态集".equals(zhongTai)) {
-                                                             JOptionPane.showMessageDialog(null, "请输入完整的初态集和终态集！");
-                                                         } else {
-
-                                                             coculateGraphToGrammar();
-                                                         }
+                    if ("初态集".equals(chuTai) || "终态集".equals(zhongTai)) {
+                        JOptionPane.showMessageDialog(null, "请输入完整的初态集和终态集！");
+                    } else {
 
 
-                                                     }
-
-                                                 }
-                                             });
-
-        randioButton1.addChangeListener(new
-
-                                                ChangeListener() {
-                                                    @Override
-                                                    public void stateChanged(ChangeEvent e) {
-                                                        if (randioButton1.isSelected() && modelType != ModelType.LeftToNf) {
-
-                                                            if (modelType != ModelType.RightToNf) {
-                                                                initGrammerToGraph();
-                                                            }
-                                                            ModelType priorModelType = modelType;
-
-                                                            modelType = ModelType.LeftToNf;
-                                                            restoreGrammarToList(priorModelType);
-
-                                                        }
-                                                    }
-                                                });
+                        coculateGraphToGrammar(chuTai, zhongTai);
+                    }
 
 
-        randioButton2.addChangeListener(new
+                }
 
-                                                ChangeListener() {
-                                                    @Override
-                                                    public void stateChanged(ChangeEvent e) {
-                                                        if (randioButton2.isSelected() && modelType != ModelType.RightToNf) {
+            }
+        });
 
-                                                            if (modelType != ModelType.LeftToNf) {
-                                                                initGrammerToGraph();
-                                                            }
+        randioButton1.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (randioButton1.isSelected() && modelType != ModelType.LeftToNf) {
 
-                                                            ModelType priorModelType = modelType;
+                    if (modelType != ModelType.RightToNf) {
+                        initGrammerToGraph();
+                    }
+                    ModelType priorModelType = modelType;
 
-                                                            modelType = ModelType.RightToNf;
-                                                            restoreGrammarToList(priorModelType);
+                    modelType = ModelType.LeftToNf;
+                    restoreGrammarToList(priorModelType);
 
-                                                        }
-                                                    }
-                                                });
-
-        randioButton3.addChangeListener(new
-
-                                                ChangeListener() {
-                                                    @Override
-                                                    public void stateChanged(ChangeEvent e) {
-                                                        if (randioButton3.isSelected() && modelType != ModelType.NfToLeft) {
-
-                                                            if (modelType != ModelType.NfToRight) {
-                                                                initGraphToGrammer();
-                                                            }
-                                                            ModelType priorModelType = modelType;
-                                                            modelType = ModelType.NfToLeft;
-                                                            restoreGrammarToList(priorModelType);
-                                                        }
-                                                    }
-                                                });
-
-        randioButton4.addChangeListener(new
-
-                                                ChangeListener() {
-                                                    @Override
-                                                    public void stateChanged(ChangeEvent e) {
-                                                        if (randioButton4.isSelected() && modelType != ModelType.NfToRight) {
-
-                                                            if (modelType != ModelType.NfToLeft) {
-                                                                initGraphToGrammer();
-                                                            }
-                                                            ModelType priorModelType = modelType;
-                                                            modelType = ModelType.NfToRight;
-                                                            restoreGrammarToList(priorModelType);
-                                                        }
-                                                    }
-                                                });
+                }
+            }
+        });
 
 
-        jTableGrammar.addMouseListener(new
+        randioButton2.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (randioButton2.isSelected() && modelType != ModelType.RightToNf) {
 
-                                               MouseAdapter() {
-                                                   @Override
-                                                   public void mouseClicked(MouseEvent e) {
-                                                       if (e.getButton() == MouseEvent.BUTTON3) {
-                                                           deleGrammerIndex = jTableGrammar.rowAtPoint(e.getPoint());
-                                                           if (deleGrammerIndex == -1) {
-                                                               return;
-                                                           }
+                    if (modelType != ModelType.LeftToNf) {
+                        initGrammerToGraph();
+                    }
 
+                    ModelType priorModelType = modelType;
 
-                                                           if (modelType == ModelType.LeftToNf || modelType == ModelType.RightToNf) {
-                                                               grammarJPopupMenu.show(jTableGrammar, e.getX(), e.getY());
-                                                           }
+                    modelType = ModelType.RightToNf;
+                    restoreGrammarToList(priorModelType);
 
-                                                       }
-                                                   }
-                                               });
+                }
+            }
+        });
 
+        randioButton3.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (randioButton3.isSelected() && modelType != ModelType.NfToLeft) {
 
-        jTableGraph.addMouseListener(new
+                    if (modelType != ModelType.NfToRight) {
+                        initGraphToGrammer();
+                    }
+                    ModelType priorModelType = modelType;
+                    modelType = ModelType.NfToLeft;
+                    restoreGrammarToList(priorModelType);
+                }
+            }
+        });
 
-                                             MouseAdapter() {
-                                                 @Override
-                                                 public void mouseClicked(MouseEvent e) {
-                                                     if (e.getButton() == MouseEvent.BUTTON3) {
-                                                         deleGraphIndex = jTableGraph.rowAtPoint(e.getPoint());
-                                                         if (deleGraphIndex == -1) {
-                                                             return;
-                                                         }
+        randioButton4.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (randioButton4.isSelected() && modelType != ModelType.NfToRight) {
 
-
-                                                         if (modelType == ModelType.NfToLeft || modelType == ModelType.NfToRight) {
-                                                             graphJPopupMenu.show(jTableGraph, e.getX(), e.getY());
-                                                         }
-
-
-                                                     }
-                                                 }
-                                             });
-
-
-        grammarDelMenItem.addActionListener(new
-
-                                                    ActionListener() {
-                                                        @Override
-                                                        public void actionPerformed(ActionEvent e) {
-                                                            System.out.println("delete:" + deleGrammerIndex);
-                                                            expressionList.remove(deleGrammerIndex);
-                                                            updateGrammarTable(true);
-                                                        }
-                                                    });
+                    if (modelType != ModelType.NfToLeft) {
+                        initGraphToGrammer();
+                    }
+                    ModelType priorModelType = modelType;
+                    modelType = ModelType.NfToRight;
+                    restoreGrammarToList(priorModelType);
+                }
+            }
+        });
 
 
-        graphDelMenItem.addActionListener(new
+        jTableGrammar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    deleGrammerIndex = jTableGrammar.rowAtPoint(e.getPoint());
+                    if (deleGrammerIndex == -1) {
+                        return;
+                    }
 
-                                                  ActionListener() {
-                                                      @Override
-                                                      public void actionPerformed(ActionEvent e) {
-                                                          System.out.println("delete:" + deleGraphIndex);
-                                                          if (deleGraphIndex >= 0) {
-                                                              graphList.remove(deleGraphIndex);
-                                                              updateTable();
-                                                          }
-                                                      }
-                                                  });
+
+                    if (modelType == ModelType.LeftToNf || modelType == ModelType.RightToNf) {
+                        grammarJPopupMenu.show(jTableGrammar, e.getX(), e.getY());
+                    }
+
+                }
+            }
+        });
+
+
+        jTableGraph.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    deleGraphIndex = jTableGraph.rowAtPoint(e.getPoint());
+                    if (deleGraphIndex == -1) {
+                        return;
+                    }
+
+
+                    if (modelType == ModelType.NfToLeft || modelType == ModelType.NfToRight) {
+                        graphJPopupMenu.show(jTableGraph, e.getX(), e.getY());
+                    }
+
+
+                }
+            }
+        });
+
+
+        grammarDelMenItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("delete:" + deleGrammerIndex);
+                expressionList.remove(deleGrammerIndex);
+                updateGrammarTable(true);
+            }
+        });
+
+
+        graphDelMenItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("delete:" + deleGraphIndex);
+                if (deleGraphIndex >= 0) {
+                    graphList.remove(deleGraphIndex);
+                    updateTable();
+                }
+            }
+        });
     }
 
     private void restoreGrammarToList(ModelType priorModeleType) {
@@ -749,7 +761,6 @@ public class MainView extends JFrame implements IMainView {
 
 
     }
-
 
 
     class TextFiledFocusListener implements FocusListener {
