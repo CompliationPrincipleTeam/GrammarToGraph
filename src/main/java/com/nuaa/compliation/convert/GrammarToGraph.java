@@ -95,9 +95,27 @@ public class GrammarToGraph extends BaseConvertGrammarToGraph {
      *
      * @param node
      * @param split
+     * example: 某产生式为  D-> 0A|0B|0C|0
+     * node  = D
+     * split = {"0","B0","C0","0"}
+     * 
      */
     private void rightGrammarAddEdges(String node, String[] split) {
-
+    	//public Node(String value, NodeType nodeType)
+    	//public void addEdge(Object startNode, Object endNode, String edgeValue) 
+    	Node endNode = new Node(Constant.endNodeName,NodeType.endNode);
+    	for(String s:split) {
+    		if(s.length()==1)
+    		{
+    			rightGraph.addEdge(node, endNode, String.valueOf(s.charAt(0)));
+    		}
+    		else
+    		{	int len = s.length();
+    			rightGraph.addEdge(node, String.valueOf(s.charAt(len-1)), s.substring(0, len-1));
+    		}
+    			
+    			
+    	}
     }
 
 }
