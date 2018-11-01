@@ -1,5 +1,6 @@
 package com.nuaa.compliation.view;
 
+import com.apple.eawt.Application;
 import com.nuaa.compliation.bean.*;
 import com.nuaa.compliation.convert.GrammarToGraph;
 import com.nuaa.compliation.convert.GraphToGrammar;
@@ -19,6 +20,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,6 +123,18 @@ public class MainView extends JFrame implements IMainView {
 
     public MainView() throws HeadlessException {
         super();
+
+
+        try {
+            UIManager.setLookAndFeel("com.apple.laf.AquaLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+
+
+        setIconImage(new ImageIcon("res/icon.png").getImage());
+        Application.getApplication().setDockIconImage(
+                new ImageIcon("res/icon.png").getImage());
 
 
         initData();
@@ -260,18 +274,6 @@ public class MainView extends JFrame implements IMainView {
 
     @Override
     public void initView() {
-
-
-        UIManager.LookAndFeelInfo[] info = UIManager.getInstalledLookAndFeels();
-        for (UIManager.LookAndFeelInfo tem : info) {
-            System.out.println(tem.getClassName());
-        }
-
-        try {
-            UIManager.setLookAndFeel("com.apple.laf.AquaLookAndFeel");
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
 
 
         setTitle("词法分析");
