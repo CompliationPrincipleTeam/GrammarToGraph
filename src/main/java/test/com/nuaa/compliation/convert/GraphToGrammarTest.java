@@ -16,19 +16,23 @@ import java.util.List;
  *
  * @author <Authors name>
  * @version 1.0
- * @since <pre>十一月 1, 2018</pre>
+ * @since
+ * 
+ *        <pre>
+ * 十一月 1, 2018
+ *        </pre>
  */
 public class GraphToGrammarTest {
 
-    @Before
-    public void before() throws Exception {
-    }
+	@Before
+	public void before() throws Exception {
+	}
 
-    @After
-    public void after() throws Exception {
-    }
+	@After
+	public void after() throws Exception {
+	}
 
-    /**
+	/**
      * Method: graphToLeftGrammer(Graph graph)
      */
     @Test
@@ -54,10 +58,15 @@ public class GraphToGrammarTest {
 
 
         GraphToGrammar graphToGrammar = new GraphToGrammar();
-        graphToGrammar.graphToGrammar(split, split1, graphList, ModelType.NfToLeft);
+        
+        //自动机转左文法测试
+//        graphToGrammar.graphToGrammar(split, split1, graphList, ModelType.NfToLeft);
+//        List<String> p = graphToGrammar.leftGrammar.getP();
 
-        List<String> p = graphToGrammar.leftGrammar.getP();
-
+        //自动机转右文法测试
+        graphToGrammar.graphToGrammar(split, split1, graphList, ModelType.NfToRight);
+        List<String> p_right = graphToGrammar.rightGrammar.getP();
+        
 
 /**
  Graph graph = new Graph();
@@ -77,12 +86,11 @@ public class GraphToGrammarTest {
  */
 
 
-        for (String str : p) {
+        for (String str : p_right) {
             System.out.println(str);
         }
 
 
     }
 
-
-} 
+}
