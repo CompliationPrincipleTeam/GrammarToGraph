@@ -37,6 +37,7 @@ public class GrammarToGraph extends BaseConvertGrammarToGraph {
                 break;
             case RightToNf:
                 rightGrammarAddEdges(node, split);
+		break;
             default:
                 break;
 
@@ -105,6 +106,7 @@ public class GrammarToGraph extends BaseConvertGrammarToGraph {
     	//public void addEdge(Object startNode, Object endNode, String edgeValue) 
     	Node endNode = new Node(Constant.endNodeName,NodeType.endNode);
     	for(String s:split) {
+		GrammarToGraph.checkRight(s);
     		if(s.length()==1)
     		{
     			rightGraph.addEdge(node, endNode, String.valueOf(s.charAt(0)));
@@ -135,6 +137,17 @@ public class GrammarToGraph extends BaseConvertGrammarToGraph {
         for (String[] edge : edges) {
             System.out.println(edge[0] + "-" + edge[1] + "->" + edge[2]);
         }
+    }
+	
+    private static void checkRight(String expr) throws GrammarPhaseException {
+    	int len=expr.length();
+    	for(int i=0;i<=len-2;i++) {
+    		//只能是最后一个字符为VN，即大写字母
+    		if('A'<=expr.charAt(i) && expr.charAt(i)<='Z')
+    			throw new GrammarPhaseException(expr + "不是合法的右文法表达式！");
+    	}
+    	if(len>1 && !('A' <= expr.charAt(len-1) && expr.charAt(len-1) <= 'Z'))
+    		throw new GrammarPhaseException(expr + "不是合法的右文法表达式！");
     }
 
 }
