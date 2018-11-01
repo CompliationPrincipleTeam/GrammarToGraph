@@ -60,21 +60,21 @@ public class convertTest {
     /**
      * Method: rightGrammarToGraph()
      */
-    @Test
-    public void testRightGrammarToGraph() throws Exception {
-        System.out.println("testRightGrammarToGraph");
-        //TODO: Test goes here...
-        //产生式：start[i] -> expr[i]
-    	//VT = {0,1,....}
+        //VT = {0,1,....}
     	//VN = {A,B,C,D,...}
     	//输入：两个字符数组
     	//开始符号默认是start[0]
     	//终结符默认 "F"
-        String[] start = {"A", 		 "B", 	  "C",		 "D"};
-        String[] expr  = {"0|0B|1D", "0D|1C", "0|0B|1D", "0D|1D"};
-        GrammarToGraph g = new GrammarToGraph();
-        g.rightGrammarToGraph(start, expr);
-    }
+    @Test
+	public void testRightGrammarToGraph() throws GrammarPhaseException
+	{
+		System.out.println("testRightGrammarToGraph");
+		String[] start = {"A","B","C","D"};
+		//invalid
+		//String[] expr =  {"0B0|0B|1D","0D|1C","0|0B|1D","0D|1D"};
+		String[] expr =  {"0|0B|1D","0D|1C","0|0B|1D","0D|1D"};
+		GrammarToGraph.rightGrammarToGraph(start, expr);
+	}
 
 
 } 
