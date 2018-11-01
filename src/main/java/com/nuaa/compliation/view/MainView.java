@@ -4,6 +4,7 @@ import com.nuaa.compliation.bean.*;
 import com.nuaa.compliation.convert.GrammarToGraph;
 import com.nuaa.compliation.convert.GraphToGrammar;
 import com.nuaa.compliation.enums.ModelType;
+import com.nuaa.compliation.enums.NodeType;
 import com.nuaa.compliation.exception.GrammarPhaseException;
 import com.nuaa.compliation.inter.IMainView;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
@@ -234,6 +235,24 @@ public class MainView extends JFrame implements IMainView {
 
     }
 
+    private void updateChuTaiAndZhongTaiLabel(Graph graph) {
+
+        chuTai = "";
+        zhongTai = "";
+
+        for (Node node : graph.getNodes()) {
+            if (node.getNodeType() == NodeType.endNode) {
+                zhongTai = zhongTai + node.getValue() + "|";
+            } else if (node.getNodeType() == NodeType.startNode) {
+                chuTai = chuTai + node.getValue() + "|";
+            }
+        }
+        chutaiLabel.setText("初态集：{" + chuTai.replace('|', ',') + "}");
+        zhongtaiLabel.setText("终态集：{" + zhongTai.replace('|', ',') + "}");
+
+
+    }
+
     @Override
     public void initView() {
 
@@ -460,11 +479,14 @@ public class MainView extends JFrame implements IMainView {
         switch (modelType) {
             case LeftToNf:
 
+
                 nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(grammarToGraph.leftGraph);
+                updateChuTaiAndZhongTaiLabel(grammarToGraph.leftGraph);
                 break;
             case RightToNf:
 
                 nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(grammarToGraph.rightGraph);
+                updateChuTaiAndZhongTaiLabel(grammarToGraph.rightGraph);
                 break;
             case NfToLeft:
                 nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(graphToGrammar.leftGraph);
