@@ -18,4 +18,8 @@ public interface IGraph {
     void addEdge(Object startNode, Object endNode, String edgeValue);
 
     String[][] getStrEdges();
+
+
+    void clearGraph();
+
 }

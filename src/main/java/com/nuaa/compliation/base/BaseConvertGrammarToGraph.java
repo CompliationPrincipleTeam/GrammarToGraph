@@ -3,6 +3,7 @@ package com.nuaa.compliation.base;
 import com.nuaa.compliation.bean.Graph;
 import com.nuaa.compliation.bean.Grammar;
 import com.nuaa.compliation.enums.ModelType;
+import com.nuaa.compliation.exception.GrammarPhaseException;
 
 /**
  * @author dmrfcoder
@@ -19,7 +20,6 @@ public abstract class BaseConvertGrammarToGraph {
 
     public abstract Graph GrammarToGraph(Grammar leftGrammar);
 
-    public abstract void addEdges(String startNode, String expression, ModelType modelType);
 
     public String[][] getStrEdges(ModelType modelType) {
         if (modelType == ModelType.LeftToNf) {
@@ -29,4 +29,26 @@ public abstract class BaseConvertGrammarToGraph {
         }
         return null;
     }
+
+
+    public boolean isChar(char c) {
+        return !Character.isDigit(c);
+    }
+
+    public boolean isInt(char c) {
+        return Character.isDigit(c);
+    }
+
+    public void clearGraph(ModelType modelType) {
+        if (modelType == ModelType.LeftToNf) {
+            leftGraph.clearGraph();
+        } else if (modelType == ModelType.RightToNf) {
+            rightGraph.clearGraph();
+        }
+    }
+
+
+    public abstract void addEdges(String startNode, String expression, ModelType modelType) throws GrammarPhaseException;
+
+
 }

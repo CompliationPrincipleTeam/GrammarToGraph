@@ -10,6 +10,8 @@ public class Node {
     private String value;
     private NodeType nodeType;
 
+
+
     public String getValue() {
         return value;
     }

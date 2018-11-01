@@ -74,4 +74,14 @@ public class LeftGrammarToGraphTest {
     }
 
 
+    @Test
+    public void testCharDigit() {
+        char a = 'd';
+        if (Character.isDigit(a)) {
+            System.out.println("is number");
+        } else {
+            System.out.println("not number");
+        }
+    }
+
 } 

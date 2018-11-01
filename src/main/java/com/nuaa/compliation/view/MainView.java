@@ -3,6 +3,7 @@ package com.nuaa.compliation.view;
 import com.nuaa.compliation.bean.*;
 import com.nuaa.compliation.convert.GrammarToGraph;
 import com.nuaa.compliation.enums.ModelType;
+import com.nuaa.compliation.exception.GrammarPhaseException;
 import com.nuaa.compliation.inter.IMainView;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
@@ -14,8 +15,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author dmrfcoder
@@ -62,7 +61,7 @@ public class MainView extends JFrame implements IMainView {
     private JMenuItem graphDelMenItem;
 
 
-    private GrammarToGraph leftGrammarToGraph;
+    private GrammarToGraph grammarToGraph;
 
     private String[] titles = {"起点", "状态", "终点"};
     private String[] titles2 = {"结点", "表达式"};
@@ -79,6 +78,19 @@ public class MainView extends JFrame implements IMainView {
     private ArrayList<String[]> expressionList;
     private ArrayList<String[]> graphList;
 
+    private ArrayList<String[]> leftExpressionList;
+    private ArrayList<String[]> leftGraphList;
+
+    private ArrayList<String[]> rightExpressionList;
+    private ArrayList<String[]> rightGraphList;
+
+
+    private ArrayList<String[]> nfLeftExpressionList;
+    private ArrayList<String[]> nfLeftGraphList;
+
+    private ArrayList<String[]> nfRightExpressionList;
+    private ArrayList<String[]> nfRightGraphList;
+
 
     public MainView() throws HeadlessException {
         super();
@@ -91,6 +103,23 @@ public class MainView extends JFrame implements IMainView {
 
     @Override
     public void initData() {
+
+
+        expressionList = new ArrayList<>();
+        graphList = new ArrayList<>();
+
+        leftExpressionList = new ArrayList<>();
+        leftGraphList = new ArrayList<>();
+
+        rightExpressionList = new ArrayList<>();
+        rightGraphList = new ArrayList<>();
+
+        nfLeftExpressionList = new ArrayList<>();
+        nfLeftGraphList = new ArrayList<>();
+
+        nfRightExpressionList = new ArrayList<>();
+        nfRightGraphList = new ArrayList<>();
+
 
         grammarJPopupMenu = new JPopupMenu();
         graphJPopupMenu = new JPopupMenu();
@@ -107,12 +136,8 @@ public class MainView extends JFrame implements IMainView {
         graphJPopupMenu.add(graphDelMenItem);
 
 
-        expressionList = new ArrayList<>();
-        graphList = new ArrayList<>();
-
-
         modelType = ModelType.LeftToNf;
-        leftGrammarToGraph = new GrammarToGraph();
+        grammarToGraph = new GrammarToGraph();
 
         startText = new JTextField();
         startText.setText("起点");
@@ -297,11 +322,15 @@ public class MainView extends JFrame implements IMainView {
 
     private void coculateGrammerToGraph() {
         for (String[] grammar : expressionList) {
-            leftGrammarToGraph.addEdges(grammar[0], grammar[1], modelType);
+            try {
+                grammarToGraph.addEdges(grammar[0], grammar[1], modelType);
+            } catch (GrammarPhaseException e) {
+                e.printStackTrace();
+            }
 
         }
 
-        String[][] strEdges = leftGrammarToGraph.getStrEdges(modelType);
+        String[][] strEdges = grammarToGraph.getStrEdges(modelType);
 
         graphList.clear();
         for (String[] edge : strEdges) {
@@ -311,7 +340,9 @@ public class MainView extends JFrame implements IMainView {
         updateGraphTable();
     }
 
+    private void coculateGraphToGrammar() {
 
+    }
 
 
     private void drawGraph() {
@@ -320,12 +351,12 @@ public class MainView extends JFrame implements IMainView {
         graphPoetView = new GraphView();
         switch (modelType) {
             case LeftToNf:
-                coculateGrammerToGraph();
-                nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(leftGrammarToGraph.leftGraph);
+
+                nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(grammarToGraph.leftGraph);
                 break;
             case RightToNf:
-                coculateGrammerToGraph();
-                nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(leftGrammarToGraph.rightGraph);
+
+                nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(grammarToGraph.rightGraph);
                 break;
             case NfToLeft:
                 break;
@@ -345,9 +376,11 @@ public class MainView extends JFrame implements IMainView {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String start = startNodeText.getText().trim();
-                String expression = expressionText.getText().trim();
+
                 if (modelType == ModelType.LeftToNf || modelType == ModelType.RightToNf) {
+                    String start = startNodeText.getText().trim();
+                    String expression = expressionText.getText().trim();
+
                     if (start.equals("起点") || expression.equals("表达式")) {
                         JOptionPane.showMessageDialog(null, "填写内容不可为空！");
 
@@ -355,15 +388,40 @@ public class MainView extends JFrame implements IMainView {
                         String[] tablecontent = {start, expression};
 
 
-                        expressionList.add(tablecontent);
+                        try {
+                            grammarToGraph.addEdges(start, expression, modelType);
+                            expressionList.add(tablecontent);
+                            updateGrammarTable(false);
+                            startNodeText.setText("起点");
+                            expressionText.setText("表达式");
+                        } catch (GrammarPhaseException e1) {
+                            JOptionPane.showMessageDialog(null, e1.getExceptionInfo());
+                            updateGrammarTable(true);
+                        }
 
-                        updateGrammarTable();
 
-
-                        startNodeText.setText("起点");
-                        expressionText.setText("表达式");
                     }
                 } else {
+
+                    String start = startText.getText().trim();
+                    String end = endText.getText().trim();
+                    String vaule = valueText.getText().trim();
+
+                    if ("起点".equals(start) || "经过".equals(vaule) || "终点".equals(end)) {
+                        JOptionPane.showMessageDialog(null, "请填写完整的关系！");
+                    } else {
+                        String[] graphItem = {start, vaule, end};
+                        graphList.add(graphItem);
+
+                        updateGraphTable();
+
+                        startText.setText("起点");
+                        valueText.setText("经过");
+                        endText.setText("终点");
+
+
+                    }
+
 
                 }
 
@@ -373,7 +431,22 @@ public class MainView extends JFrame implements IMainView {
         drawButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawGraph();
+                if (modelType == ModelType.RightToNf || modelType == ModelType.LeftToNf) {
+                    drawGraph();
+                } else {
+                    String chuTai = chuTaiText.getText().trim();
+                    String zhongTai = zhongTaiText.getText().trim();
+
+                    if ("初态集".equals(chuTai) || "终态集".equals(zhongTai)) {
+                        JOptionPane.showMessageDialog(null, "请输入完整的初态集和终态集！");
+                    } else {
+
+                        coculateGraphToGrammar();
+                    }
+
+
+                }
+
             }
         });
 
@@ -385,7 +458,11 @@ public class MainView extends JFrame implements IMainView {
                     if (modelType != ModelType.RightToNf) {
                         initGrammerToGraph();
                     }
+                    ModelType priorModelType = modelType;
+
                     modelType = ModelType.LeftToNf;
+                    restoreGrammarToList(priorModelType);
+
                 }
             }
         });
@@ -399,7 +476,12 @@ public class MainView extends JFrame implements IMainView {
                     if (modelType != ModelType.LeftToNf) {
                         initGrammerToGraph();
                     }
+
+                    ModelType priorModelType = modelType;
+
                     modelType = ModelType.RightToNf;
+                    restoreGrammarToList(priorModelType);
+
                 }
             }
         });
@@ -412,8 +494,9 @@ public class MainView extends JFrame implements IMainView {
                     if (modelType != ModelType.NfToRight) {
                         initGraphToGrammer();
                     }
-
+                    ModelType priorModelType = modelType;
                     modelType = ModelType.NfToLeft;
+                    restoreGrammarToList(priorModelType);
                 }
             }
         });
@@ -426,7 +509,9 @@ public class MainView extends JFrame implements IMainView {
                     if (modelType != ModelType.NfToLeft) {
                         initGraphToGrammer();
                     }
+                    ModelType priorModelType = modelType;
                     modelType = ModelType.NfToRight;
+                    restoreGrammarToList(priorModelType);
                 }
             }
         });
@@ -476,7 +561,7 @@ public class MainView extends JFrame implements IMainView {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("delete:" + deleGrammerIndex);
                 expressionList.remove(deleGrammerIndex);
-                updateGrammarTable();
+                updateGrammarTable(true);
             }
         });
 
@@ -493,8 +578,79 @@ public class MainView extends JFrame implements IMainView {
         });
     }
 
+    private void restoreGrammarToList(ModelType priorModeleType) {
 
-    private void updateGrammarTable() {
+        switch (priorModeleType) {
+            case LeftToNf:
+                leftExpressionList = expressionList;
+                leftGraphList = graphList;
+                break;
+            case RightToNf:
+                rightExpressionList = expressionList;
+                rightGraphList = graphList;
+                break;
+            case NfToRight:
+
+                break;
+            case NfToLeft:
+                nfLeftExpressionList = expressionList;
+                nfLeftGraphList = graphList;
+                break;
+            default:
+
+                nfRightExpressionList = expressionList;
+                nfRightGraphList = graphList;
+                break;
+        }
+
+        switch (modelType) {
+            case LeftToNf:
+                expressionList = leftExpressionList;
+                graphList = leftGraphList;
+                break;
+            case RightToNf:
+                expressionList = rightExpressionList;
+                graphList = rightGraphList;
+                break;
+            case NfToRight:
+                expressionList = nfRightExpressionList;
+                graphList = nfRightGraphList;
+                break;
+            case NfToLeft:
+                expressionList = nfLeftExpressionList;
+                graphList = nfLeftGraphList;
+                break;
+            default:
+                break;
+        }
+
+
+        int count = tabelModelGrammar.getRowCount();
+        for (int i = 0; i < count; i++) {
+            tabelModelGrammar.removeRow(0);
+        }
+
+        for (String[] grammar : expressionList) {
+            tabelModelGrammar.addRow(grammar);
+        }
+
+        int count1 = tabelModelGraph.getRowCount();
+        for (int i = 0; i < count1; i++) {
+            tabelModelGraph.removeRow(0);
+        }
+
+        for (String[] graph : graphList) {
+            tabelModelGraph.addRow(graph);
+        }
+        drawGraph();
+
+
+    }
+
+
+    private void updateGrammarTable(boolean catchException) {
+
+
         int count = tabelModelGrammar.getRowCount();
         for (int i = 0; i < count; i++) {
             tabelModelGrammar.removeRow(0);
@@ -504,6 +660,29 @@ public class MainView extends JFrame implements IMainView {
         for (String[] edge : expressionList) {
             tabelModelGrammar.addRow(edge);
         }
+
+
+        String[][] edges;
+
+        if (catchException) {
+            grammarToGraph.clearGraph(modelType);
+            coculateGrammerToGraph();
+        }
+        edges = grammarToGraph.getStrEdges(modelType);
+
+        int count1 = tabelModelGraph.getRowCount();
+        for (int i = 0; i < count1; i++) {
+            tabelModelGraph.removeRow(0);
+        }
+
+
+        graphList.clear();
+        for (String[] edge : edges) {
+            tabelModelGraph.addRow(edge);
+            graphList.add(edge);
+        }
+
+
     }
 
     private void updateGraphTable() {

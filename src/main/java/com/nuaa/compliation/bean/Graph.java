@@ -21,6 +21,7 @@ public class Graph implements IGraph {
         nodes = new ArrayList<>();
     }
 
+
     /**
      * 添加边，参数是Edge（边）
      *
@@ -134,5 +135,11 @@ public class Graph implements IGraph {
         return tempEdges;
 
 
+    }
+
+    @Override
+    public void clearGraph() {
+        edges.clear();
+        nodes.clear();
     }
 }

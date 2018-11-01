@@ -40,4 +40,7 @@ public class Edge {
         this.endNode = endNode;
         this.edgeValue = edgeValue;
     }
+
+
+
 }
