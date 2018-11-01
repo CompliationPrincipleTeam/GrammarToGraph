@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,20 +37,23 @@ public class GraphToGrammarTest {
         String[] split1 = {"B", "D"};
 
 
-        Graph graph = new Graph();
-        graph.addEdge("A", "0", "B");
-        graph.addEdge("A", "1", "C");
-        graph.addEdge("B", "0", "C");
-        graph.addEdge("C", "0", "D");
+        ArrayList<String[]> graphList = new ArrayList<>();
 
+        String[] a = {"A", "0", "B"};
+        String[] b = {"A", "1", "C"};
+        String[] c = {"B", "0", "C"};
+        String[] v = {"C", "0", "D"};
 
-        graph.updateChuTai(split);
-        graph.updateZhongTai(split1);
+        graphList.add(a);
+        graphList.add(b);
+        graphList.add(c);
+        graphList.add(v);
+
 
         GraphToGrammar graphToGrammar = new GraphToGrammar();
-        Grammar grammar = graphToGrammar.graphToLeftGrammer(graph);
+        graphToGrammar.graphToLeftGrammer(split, split1, graphList);
 
-        List<String> p = grammar.getP();
+        List<String> p = graphToGrammar.leftGrammar.getP();
 
         for (String str : p) {
             System.out.println(str);

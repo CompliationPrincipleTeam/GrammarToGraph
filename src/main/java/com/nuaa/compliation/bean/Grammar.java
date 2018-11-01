@@ -27,6 +27,14 @@ public class Grammar {
     }
 
 
+    public void clearGrammar() {
+        vN.clear();
+        vT.clear();
+        p.clear();
+        s = "";
+
+    }
+
     public List<String> getvT() {
         return vT;
     }

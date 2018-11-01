@@ -7,6 +7,7 @@ import com.nuaa.compliation.bean.Edge;
 import com.nuaa.compliation.bean.Grammar;
 import com.nuaa.compliation.bean.Graph;
 import com.nuaa.compliation.bean.Node;
+import com.nuaa.compliation.enums.ModelType;
 import com.nuaa.compliation.enums.NodeType;
 
 import javax.lang.model.type.NoType;
@@ -18,17 +19,45 @@ import javax.lang.model.type.NoType;
 public class GraphToGrammar {
 
 
+    public Graph leftGraph;
+    public Graph rightGraph;
+
+    public Grammar leftGrammar;
+    public Grammar rightGrammar;
+
+
+
+
     public GraphToGrammar() {
+        leftGrammar = new Grammar();
+        rightGrammar = new Grammar();
+        leftGraph = new Graph();
+        rightGraph = new Graph();
+
+
         // TODO Auto-generated constructor stub
 
     }
 
-    public Grammar graphToLeftGrammer(Graph graph) {
 
-        Grammar grammer = new Grammar();
+    public void graphToLeftGrammer(String[] chutai, String[] zhongtai, ArrayList<String[]> graphList) {
 
-        List<Edge> edges = graph.getEdges();
-        List<Node> nodes = graph.getNodes();
+
+        leftGraph.clearGraph();
+
+        leftGrammar.clearGrammar();
+
+        for (String[] edge : graphList) {
+
+            leftGraph.addEdge(edge[0], edge[1], edge[2]);
+        }
+
+        leftGraph.updateChuTai(chutai);
+        leftGraph.updateZhongTai(zhongtai);
+
+
+        List<Edge> edges = leftGraph.getEdges();
+        List<Node> nodes = leftGraph.getNodes();
         //获取非终结符集
         List<String> vN = new ArrayList<>();
 
@@ -36,7 +65,7 @@ public class GraphToGrammar {
         for (int i = 0; i < nodes.size(); i++) {
             vN.add(nodes.get(i).getValue());
         }
-        grammer.setvN(vN);
+        leftGrammar.setvN(vN);
         //获取终结符集
         List<String> vT = new ArrayList<>();
         for (int i = 0; i < edges.size(); i++) {
@@ -44,7 +73,7 @@ public class GraphToGrammar {
                 vT.add(edges.get(i).getEdgeValue());
             }
         }
-        grammer.setvT(vT);
+        leftGrammar.setvT(vT);
         //获取终态集合
         List<String> f = new ArrayList<>();
         for (int i = 0; i < nodes.size(); i++) {
@@ -92,7 +121,7 @@ public class GraphToGrammar {
 
         //获取开始符
         if (f.size() > 1) {
-            grammer.setS("f");
+            leftGrammar.setS("f");
             String farrive = "f->";
             for (int i = 0; i < nodes.size(); i++) {
                 if (nodes.get(i).getNodeType() == NodeType.endNode) {
@@ -102,12 +131,11 @@ public class GraphToGrammar {
             farrive.substring(0, farrive.length() - 2);
             p.add(farrive);
         } else {
-            grammer.setS(f.get(0));
+            leftGrammar.setS(f.get(0));
         }
 
-        grammer.setP(p);
+        leftGrammar.setP(p);
 
-        return grammer;
 
     }
 

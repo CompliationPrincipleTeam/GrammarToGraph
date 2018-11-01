@@ -354,20 +354,13 @@ public class MainView extends JFrame implements IMainView {
 
     private void coculateGraphToGrammar(String chuTai, String zhongTai) {
 
-        String[] split = chuTai.split("\\|");
-        String[] split1 = zhongTai.split("\\|");
+        String[] splitChutai = chuTai.split("\\|");
+        String[] splitZhongtai = zhongTai.split("\\|");
 
 
-        Graph graph = new Graph();
-        for (String[] edge : graphList) {
+        graphToGrammar.graphToLeftGrammer(splitChutai, splitZhongtai, graphList);
 
-            graph.addEdge(edge[0], edge[1], edge[2]);
-        }
-
-        graph.updateChuTai(split);
-        graph.updateZhongTai(split1);
-
-        Grammar grammar = graphToGrammar.graphToLeftGrammer(graph);
+        drawGraph();
 
 
     }
@@ -387,8 +380,10 @@ public class MainView extends JFrame implements IMainView {
                 nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(grammarToGraph.rightGraph);
                 break;
             case NfToLeft:
+                nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(graphToGrammar.leftGraph);
                 break;
             case NfToRight:
+                nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(graphToGrammar.rightGraph);
                 break;
             default:
                 break;
