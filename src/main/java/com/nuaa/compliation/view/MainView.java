@@ -358,7 +358,7 @@ public class MainView extends JFrame implements IMainView {
         String[] splitZhongtai = zhongTai.split("\\|");
 
 
-        graphToGrammar.graphToLeftGrammer(splitChutai, splitZhongtai, graphList);
+       // graphToGrammar.graphToLeftGrammer(splitChutai, splitZhongtai, graphList);
 
         drawGraph();
 
@@ -380,10 +380,10 @@ public class MainView extends JFrame implements IMainView {
                 nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(grammarToGraph.rightGraph);
                 break;
             case NfToLeft:
-                nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(graphToGrammar.leftGraph);
+               // nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(graphToGrammar.leftGraph);
                 break;
             case NfToRight:
-                nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(graphToGrammar.rightGraph);
+               // nodeEdgeBasicVisualizationServer = graphPoetView.updateGraph(graphToGrammar.rightGraph);
                 break;
             default:
                 break;

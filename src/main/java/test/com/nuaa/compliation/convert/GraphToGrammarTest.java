@@ -32,6 +32,8 @@ public class GraphToGrammarTest {
      */
     @Test
     public void testGraphToLeftGrammer() throws Exception {
+
+
 //TODO: Test goes here...
         String[] split = {"A"};
         String[] split1 = {"B", "D"};
@@ -54,6 +56,25 @@ public class GraphToGrammarTest {
         graphToGrammar.graphToLeftGrammer(split, split1, graphList);
 
         List<String> p = graphToGrammar.leftGrammar.getP();
+
+
+/**
+ Graph graph = new Graph();
+
+ graph.addEdge("A", "0", "B");
+ graph.addEdge("A", "1", "C");
+ graph.addEdge("B", "0", "C");
+ graph.addEdge("C", "0", "D");
+
+ graph.updateZhongTai(split1);
+ graph.updateChuTai(split);
+
+
+ GraphToGrammar graphToGrammar = new GraphToGrammar();
+ graphToGrammar.graphToLeftGrammer(graph);
+ Grammar grammar = graphToGrammar.getGrammer()
+ */
+
 
         for (String str : p) {
             System.out.println(str);

@@ -16,6 +16,8 @@ public class Constant {
 
 
     public static String startNodeName="S";
+    public static String endNodeName="E";
+
 
 
 }

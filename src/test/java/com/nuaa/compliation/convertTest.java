@@ -72,8 +72,8 @@ public class convertTest {
     	//终结符默认 "F"
         String[] start = {"A", 		 "B", 	  "C",		 "D"};
         String[] expr  = {"0|0B|1D", "0D|1C", "0|0B|1D", "0D|1D"};
-        GrammarToGraph g = new GrammarToGraph();
-        g.rightGrammarToGraph(start, expr);
+        //GrammarToGraph g = new GrammarToGraph();
+        //g.rightGrammarToGraph(start, expr);
     }
 
 
