@@ -9,6 +9,7 @@ import com.nuaa.compliation.exception.GrammarPhaseException;
 import com.nuaa.compliation.inter.IMainView;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -16,6 +17,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,6 +121,8 @@ public class MainView extends JFrame implements IMainView {
 
     public MainView() throws HeadlessException {
         super();
+
+
         initData();
         initView();
         initListener();
@@ -255,6 +260,18 @@ public class MainView extends JFrame implements IMainView {
 
     @Override
     public void initView() {
+
+
+        UIManager.LookAndFeelInfo[] info = UIManager.getInstalledLookAndFeels();
+        for (UIManager.LookAndFeelInfo tem : info) {
+            System.out.println(tem.getClassName());
+        }
+
+        try {
+            UIManager.setLookAndFeel("com.apple.laf.AquaLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
 
 
         setTitle("词法分析");
